@@ -9,6 +9,7 @@ import java.util.Collections;
 public class PlayBlackJack
 	{
 		static boolean playing= true;
+		static boolean playHitStay= true;
 		static int hitStay;
 		static int coTotal;
 		static int userTotal;
@@ -25,6 +26,7 @@ public class PlayBlackJack
 				makeCards();
 //				printCards();
 				playGame();
+				coHitStay();
 				Aces();
 				playAgain();
 					}
@@ -124,21 +126,20 @@ public class PlayBlackJack
 					
 					System.out.println("Your cards are a " + userHand.get(0).getName() +" and a "+ userHand.get(1).getName());
 					System.out.println("Your total is " + (userHand.get(0).getValue() + userHand.get(1).getValue()));
-					if ( userHand.get(0).getValue() + userHand.get(1).getValue() == 21)
+					if ( userHand.get(0).getValue() + userHand.get(1).getValue() == 21 && coTotal != 21)
 						{
 							JOptionPane.showMessageDialog(frame, "You Win");
+							System.out.println("The computers total was " + coTotal);
 							playAgain();
 						}
 					
 					System.out.println("The computer's first card is a " + coHand.get(0).getName());
 					
-			while (userTotal < 21)
+			while (playHitStay)
 				{
-						
-						
-					
+							
 					Object[] options = {"Hit", "Stay"};
-					hitStay = JOptionPane.showOptionDialog(frame, "Would you like to hit or stay?",
+					hitStay = JOptionPane.showOptionDialog(frame, "Would you like to hit or stay? Your cards are displayed to the right.",
 							"Your Choice",
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE,
@@ -154,119 +155,167 @@ public class PlayBlackJack
 							
 							userTotal = userHand.get(0).getValue() + userHand.get(1).getValue() + 
 									userHand.get(2).getValue();
+							Aces();
 							
 							JOptionPane.showMessageDialog(frame, "Risky Move. The card is a " + userHand.get(2).getName());
 							JOptionPane.showMessageDialog(frame, "Your new total is " + (userTotal ) );
 							System.out.println("Your new total is " + userTotal);
 							
-							Aces();
 							if (userTotal > 21)
 								{
 									JOptionPane.showMessageDialog(frame, "You Lose");
 									playing=false;
+									playHitStay=false;
 									playAgain();
 								}
 							if (userTotal == 21 &&
 									coTotal !=21 )
 								{
 									JOptionPane.showMessageDialog(frame, "You Win");
+									playing=false;
+									playHitStay=false;
 									playAgain();	
 								}
-							
-							Object[] options1 = {"Hit", "Stay"};
-							hitStay = JOptionPane.showOptionDialog(frame, "Would you like to hit or stay?",
-									"Your Choice",
-									JOptionPane.YES_NO_CANCEL_OPTION,
-									JOptionPane.QUESTION_MESSAGE,
-									null, options1, options1[0]);
-							
-							switch(hitStay)
-							{
-							case 0:
-								{
-									userHand.add( deck.get(0));
-									deck.remove(0);
-									
-									userTotal = userHand.get(0).getValue() + userHand.get(1).getValue() + 
-									userHand.get(2).getValue() +  
-									userHand.get(3).getValue();
-									
-									JOptionPane.showMessageDialog(frame, "Risky Move. The card is a " + userHand.get(3).getName());
-									JOptionPane.showMessageDialog(frame, "Your new total is " + userTotal);
-									System.out.println("Your new total is " + userTotal );
-									
-									Aces();
-									if (userTotal > 21)
-										{
-											
-											JOptionPane.showMessageDialog(frame, "You Lose");
-											playing=false;
-											playAgain();
-										}
-									if (userTotal == 21 &&
-											coTotal !=21 )
-										{
-											
-											JOptionPane.showMessageDialog(frame, "You Win");
-											playAgain();	
-										}
-									break;
-								}
-							case 1:
-									{
-										JOptionPane.showMessageDialog(frame, "Wimpy Move.");
-										JOptionPane.showMessageDialog(frame, "The computers cards were a " + coHand.get(0).getName() +
-												" and a " + coHand.get(1).getName() );
-										
-										System.out.println("The computers cards were a " + coHand.get(0).getName() +
-												" and a " + coHand.get(1).getName());
-										
-										if (coTotal> userTotal)
-											{
-												System.out.println("You Lose.");
-											}
-										else if (coTotal> userTotal)
-											{
-												System.out.println("You Lose.");
-											}
-										
-									}
-										
-										playing=false;
-										playAgain();
-										break;
-									
-							}
-							
-												
 						}
-					}
-				
-					
 							
+//							Object[] options1 = {"Hit", "Stay"};
+//							hitStay = JOptionPane.showOptionDialog(frame, "Would you like to hit or stay?",
+//									"Your Choice",
+//									JOptionPane.YES_NO_CANCEL_OPTION,
+//									JOptionPane.QUESTION_MESSAGE,
+//									null, options1, options1[0]);
+//							
+//							switch(hitStay)
+//							{
+//							case 0:
+//								{
+//									userHand.add( deck.get(0));
+//									deck.remove(0);
+//									
+//									userTotal = userHand.get(0).getValue() + userHand.get(1).getValue() + 
+//									userHand.get(2).getValue() +  
+//									userHand.get(3).getValue();
+//									
+//									JOptionPane.showMessageDialog(frame, "Risky Move. The card is a " + userHand.get(3).getName());
+//									JOptionPane.showMessageDialog(frame, "Your new total is " + userTotal);
+//									System.out.println("Your new total is " + userTotal );
+//									
+//									Aces();
+//									if (userTotal > 21)
+//										{
+//											
+//											JOptionPane.showMessageDialog(frame, "You Lose");
+//											playing=false;
+//											playAgain();
+//										}
+//									if (userTotal == 21 &&
+//											coTotal !=21 )
+//										{
+//											
+//											JOptionPane.showMessageDialog(frame, "You Win");
+//											playAgain();	
+//										}
+//									break;
+//								}
+//							case 1:
+//									{
+//										JOptionPane.showMessageDialog(frame, "Wimpy Move.");
+//										JOptionPane.showMessageDialog(frame, "The computers cards were a " + coHand.get(0).getName() +
+//												" and a " + coHand.get(1).getName() );
+//										
+//										System.out.println("The computers cards were a " + coHand.get(0).getName() +
+//												" and a " + coHand.get(1).getName());
+//										
+//										if (coTotal> userTotal)
+//											{
+//												System.out.println("You Lose.");
+//											}
+//										else if (coTotal> userTotal)
+//											{
+//												System.out.println("You Lose.");
+//											}
+//										
+//									
+//										
+//										playing=false;
+//										playAgain();
+//										break;
+//									}
+//							}
+									
 						case 1:
 							{
 							
-							JOptionPane.showMessageDialog(frame, "Wimpy Move.");
+							JOptionPane.showMessageDialog(frame, "We will see if that was a good move.");
 							JOptionPane.showMessageDialog(frame, "The computers cards were a " + coHand.get(0).getName() +
 									" and a " + coHand.get(1).getName() );
-							playing=false;
+							System.out.println("The computers cards were a " + coHand.get(0).getName() +
+									" and a " + coHand.get(1).getName());
+							
+							Aces();
+							if (userTotal > 21)
+								{
+									JOptionPane.showMessageDialog(frame, "You Lose");
+									System.out.println("You Lose.");
+									playing=false;
+									playHitStay=false;
+									playAgain();
+								}
+							
+							if (userTotal == 21 &&
+									coTotal !=21 )
+								{
+									JOptionPane.showMessageDialog(frame, "You Win");
+									System.out.println("You Win.");
+									playing=false;
+									playHitStay=false;
+									playAgain();	
+								}
+							
+							if (userTotal > coTotal)
+								{
+									JOptionPane.showMessageDialog(frame, "You Win");
+									System.out.println("You Win.");
+									playing=false;
+									playHitStay=false;
+									playAgain();
+								}
+							
+							if (userTotal < coTotal)
+								{
+									JOptionPane.showMessageDialog(frame, "You Lose");
+									System.out.println("You Lose.");
+									playing=false;
+									playHitStay=false;
+									playAgain();
+								}
+							
+							
 							break;
 							}
-						}
+					}
 					
 					}
+			}
+			
+					
 				}
 		
 		
-			
+		public static void coHitStay() add this to the case 0 and 1
+		{
+			if (coTotal<=16)
+				{
+					coHand.add(deck.get(0));
+					deck.remove(0);
+				}
+		}
 		
 		public static void Aces()
 		{
 				if (userTotal >21 )	 
 					{
 						
-					
 					for (int i = 0; i<userHand.size(); i++)
 						{
 							if (userHand.get(i).getValue() == 11)  
@@ -275,7 +324,7 @@ public class PlayBlackJack
 								}	
 						}	
 					}
-			}
+		}
 		public static void playAgain()
 			{
 			System.out.println("Would you like to play again? Please type yes or no.");
@@ -289,6 +338,7 @@ public class PlayBlackJack
 			else
 				{
 					playing=true;
+					playHitStay=true;
 					playGame();
 				}
 			}
