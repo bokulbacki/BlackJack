@@ -11,6 +11,9 @@ public class PlayBlackJack
 		static boolean playing= true;
 		static boolean playHitStay= true;
 		static int hitStay;
+		static int money = 100;  // User starts with $100.
+		static int bet; 
+		static boolean userWins;
 		static int coTotal;
 		static int userTotal;
 		static JFrame frame = new JFrame();
@@ -28,6 +31,7 @@ public class PlayBlackJack
 				playGame();
 				coHitStay();
 				Aces();
+				bet();
 				playAgain();
 					}
 			}
@@ -111,6 +115,18 @@ public class PlayBlackJack
 			
 		public static void playGame()
 			{
+				
+				Scanner userInput0 = new Scanner(System.in);
+		            System.out.println("You have " + money + " dollars.");
+		            
+		                System.out.println("How many dollars do you want to bet?  (Enter 0 to end game.)");
+		                System.out.print("? ");
+		                bet = userInput0.nextInt();
+		                if (bet < 0 || bet > money)
+		                {
+		                    System.out.println("Your answer must be between 0 and " + money + '.');
+		                }     
+		        
 				Collections.shuffle(deck);
 				
 				while(playing)
@@ -136,6 +152,8 @@ public class PlayBlackJack
 						{
 							JOptionPane.showMessageDialog(frame, "You Win");
 							System.out.println("You Win!");
+							userWins=true;
+							bet();
 							System.out.println("The computers total was " + coTotal);
 							playAgain();
 						}
@@ -153,14 +171,13 @@ public class PlayBlackJack
 						{
 							userHand.add( deck.get(0));
 							userTotal= userTotal + deck.get(0).getValue();
+							Aces();
+							
 							JOptionPane.showMessageDialog(frame, "Risky Move. The card is a " + deck.get(0).getValue());
 							JOptionPane.showMessageDialog(frame, "Your new total is " + (userTotal ) );
 							deck.remove(0);
 							
 							
-							Aces();
-							
-
 							coHitStay();
 							
 							System.out.println("Your new total is " + userTotal);
@@ -169,6 +186,7 @@ public class PlayBlackJack
 								{
 									JOptionPane.showMessageDialog(frame, "You Lose");
 									System.out.println("You Lose.");
+									bet();
 									playing=false;
 									playHitStay=false;
 									playAgain();
@@ -178,6 +196,8 @@ public class PlayBlackJack
 								{
 									JOptionPane.showMessageDialog(frame, "You Win");
 									System.out.println("You Win.");
+									userWins=true;
+									bet();
 									playing=false;
 									playHitStay=false;
 									playAgain();	
@@ -198,6 +218,7 @@ public class PlayBlackJack
 									JOptionPane.showMessageDialog(frame, "You Lose");
 									System.out.println("You Lose.");
 									playing=false;
+									bet();
 									playHitStay=false;
 									playAgain();
 								}
@@ -206,6 +227,8 @@ public class PlayBlackJack
 								{
 									JOptionPane.showMessageDialog(frame, "You Win!");
 									System.out.println("You Win!");
+									userWins=true;
+									bet();
 									playing=false;
 									playHitStay=false;
 									playAgain();
@@ -216,6 +239,8 @@ public class PlayBlackJack
 								{
 									JOptionPane.showMessageDialog(frame, "You Win");
 									System.out.println("You Win.");
+									userWins=true;
+									bet();
 									playing=false;
 									playHitStay=false;
 									playAgain();	
@@ -225,6 +250,8 @@ public class PlayBlackJack
 								{
 									JOptionPane.showMessageDialog(frame, "You Win");
 									System.out.println("You Win.");
+									userWins=true;
+									bet();
 									playing=false;
 									playHitStay=false;
 									playAgain();
@@ -234,6 +261,7 @@ public class PlayBlackJack
 								{
 									JOptionPane.showMessageDialog(frame, "You Lose");
 									System.out.println("You Lose.");
+									bet();
 									playing=false;
 									playHitStay=false;
 									playAgain();
@@ -242,11 +270,55 @@ public class PlayBlackJack
 								{
 									JOptionPane.showMessageDialog(frame, "Tie");
 									System.out.println("Tie");
+									bet();
 									playing=false;
 									playHitStay=false;
 									playAgain();
 								}
 						}
+					
+//					int money = 100;  // User starts with $100.
+//					int bet; 
+//					Scanner userInput0 = new Scanner(System.in);
+//					
+//			        while (true)
+//			        {
+//			            System.out.println("You have " + money + " dollars.");
+//			            do
+//			            {
+//			                System.out.println("How many dollars do you want to bet?  (Enter 0 to end game.)");
+//			                System.out.print("? ");
+//			                bet = userInput0.nextInt();
+//			                if (bet < 0 || bet > money)
+//			                {
+//			                    System.out.println("Your answer must be between 0 and " + money + '.');
+//			                }
+//			                
+//			            } 
+//			            while (bet < 0 || bet > money);
+//			            if (bet == 0)
+//			            {
+//			                break;
+//			            }
+//			            if (userWins)
+//			            {
+//			                money = money + bet;
+//			            } 
+//			            else
+//			            {
+//			                money = money - bet;
+//			            }
+//			            System.out.println();
+//			            if (money == 0)
+//			            {
+//			                System.out.println("Looks like you've are out of money!");
+//			                break;
+//			            }
+//			        }
+//
+//			        System.out.println();
+//			        System.out.println("You leave with $" + money + '.');
+
 					
 					 
 					
@@ -425,19 +497,45 @@ public class PlayBlackJack
 		
 		public static void Aces()
 		{
-				if (userTotal >21 )	 
+				if (userTotal > 21 )	 
 					{
 						
 					for (int i = 0; i<userHand.size(); i++)
 						{
 							if (userHand.get(i).getValue() == 11)  
 								{
-								userHand.get(i).setValue(1);
+								userTotal = userTotal-10;
 								System.out.println("The ace value was changed from 11 to 1 to prevent a loss.");
 								}	
 						}	
 					}
 		}
+		
+		 public static void bet()  
+		 {
+	         while (bet < 0 || bet > money);
+	         if (bet == 0)
+	         {
+	             playAgain();
+	         }
+	         if (userWins)
+	         {
+	             money = money + bet;
+	             System.out.println("Your amount of moeny is " + money);
+	         } 
+	         else
+	         {
+	             money = money - bet;
+	             System.out.println("Your amount of moeny is " + money);
+	         }
+	         System.out.println();
+	         if (money == 0)
+	         {
+	             System.out.println("Looks like you've are out of money!");
+	             playAgain();
+	         }
+		 }
+		
 		public static void playAgain()
 			{
 			System.out.println("Would you like to play again? Please type yes or no.");
@@ -447,6 +545,8 @@ public class PlayBlackJack
 				{
 					wantsToPlay = false;
 					System.out.println("Thanks for playing!");
+					System.out.println();
+			        System.out.println("You leave with $" + money + '.');
 				}
 			else
 				{
